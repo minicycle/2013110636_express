@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var comRouter = require('./routes/company');
-
+const staffRouter = require('./routes/staff')
 
 var app = express();
 mongoose.connect('mongodb+srv://superdev:za017261976@2013110636-ikkyu.nkd4x6h.mongodb.net/restfulapi?retryWrites=true&w=majority',{useNewUrlParser: true, useUnifiedTopology: true})
@@ -21,5 +21,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/company', comRouter);
+app.use('/staff',staffRouter);
 
 module.exports = app;
