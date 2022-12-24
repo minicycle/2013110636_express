@@ -11,8 +11,15 @@ const staffSchema = new Schema({
    // createdAt:{type:Date,default:Date.now},
    // updatedAt:{type:Date,default:Date.now}
   },{
+    toJSON:{virtuals:true},
     timestamps: true, // create  : row 11 and 12 auto
     collection: "shops"});
+
+staffSchema.virtual('menus',{
+    ref:'Menu',
+    localField:'_id',
+    foreignField:'shop'
+})
 
 const shop = mongoose.model("Shop",staffSchema)
 

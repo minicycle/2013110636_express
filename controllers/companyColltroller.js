@@ -10,10 +10,7 @@ exports.comp = async(req, res, next) => {
   exports.show = async (req, res, next) => {
     try {
           const { id } = req.params
-          const company = await Company.findOne({
-          // _id : req.params.id
-          _id: id,
-          })
+          const company = await Company.findOne({_id: id,})
   
           if(!company){
               throw new Error('ไม่พบผู้ใช้งาน')

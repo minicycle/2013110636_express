@@ -6,4 +6,6 @@ router.get('/', shopController.comp);
 
 router.get('/menu', shopController.me);
 
+router.get('/:id', shopController.show);
+
 module.exports = router;
