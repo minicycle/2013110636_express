@@ -21,7 +21,10 @@ exports.show = async(req, res, next) => {
         })
 
         if(!company){
-            throw new Error('company not found')
+            //throw new Error('company not found')
+            const error = new Error("company not found")
+            error.statusCode = 400
+            throw error;
         }
         else{
             res.status(200).json({
@@ -31,11 +34,7 @@ exports.show = async(req, res, next) => {
 
 
     } catch ( error ){
-        res.status(400).json({
-            error: {
-                message: 'error: ' + error.message
-            }
-        })
+        next(error)
     }
 
 }
@@ -68,7 +67,10 @@ exports.drop = async(req, res, next) => {
         })
 
         if (company.deletedCount === 0) {
-            throw new Error(' can\'t delete data / company data not found')
+            //throw new Error(' can\'t delete data / company data not found')
+            const error = new Error("can\'t delete data / company data not found")
+            error.statusCode = 400
+            throw error;
         }
         else{
             res.status(200).json({
@@ -77,11 +79,7 @@ exports.drop = async(req, res, next) => {
         }
 
     } catch ( error ){
-        res.status(400).json({
-            error: {
-                message: 'error: ' + error.message
-            }
-        })
+        next(error)
     }
 
 }
@@ -92,6 +90,14 @@ exports.update = async(req, res, next) => {
 
         const { id } = req.params
         const { name, address } = req.body
+
+        const existData = await Company.findOne({ _id:id})
+
+        if(!existData){
+            const error = new Error("Can't find Company data for update")
+            error.statusCode = 400
+            throw error;
+        }
 
         const company = await Company.updateOne({ _id : id }, {
             name: name,
@@ -105,10 +111,6 @@ exports.update = async(req, res, next) => {
         })
 
     } catch ( error ){
-        res.status(400).json({
-            error: {
-                message: 'error: ' + error.message
-            }
-        })
+        next(error)
     }
 }

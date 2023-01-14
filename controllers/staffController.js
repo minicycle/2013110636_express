@@ -41,7 +41,10 @@ exports.show = async(req, res, next) => {
         })
 
         if(!staff){
-            throw new Error('staff not found')
+            //throw new Error('staff not found')
+            const error = new Error("staff not found")
+            error.statusCode = 400
+            throw error;
         }
         else{
             res.status(200).json({
@@ -51,11 +54,7 @@ exports.show = async(req, res, next) => {
 
 
     } catch ( error ){
-        res.status(400).json({
-            error: {
-                message: 'error: ' + error.message
-            }
-        })
+        next(error)
     }
 
 }
@@ -87,7 +86,10 @@ exports.drop = async(req, res, next) => {
         })
 
         if (staff.deletedCount === 0) {
-            throw new Error(' can\'t delete data / staff data not found')
+            //throw new Error(' can\'t delete data / staff data not found')
+            const error = new Error("can\'t delete data / staff data not found")
+            error.statusCode = 400
+            throw error;
         }
         else{
             res.status(200).json({
@@ -96,11 +98,7 @@ exports.drop = async(req, res, next) => {
         }
 
     } catch ( error ){
-        res.status(400).json({
-            error: {
-                message: 'error: ' + error.message
-            }
-        })
+        next(error)
     }
 
 }
@@ -122,21 +120,26 @@ exports.update = async(req, res, next) => {
             salary: salary
         })*/
 
+        const existData = await Staff.findOne({ _id:id})
+
+        if(!existData){
+            const error = new Error("Can't find data for update")
+            error.statusCode = 400
+            throw error;
+        }
+
         const staff = await Staff.updateOne({ _id : id }, {
             name: name,
             salary: salary
         })
+        console.log(staff)
 
         res.status(200).json({
             message: name + ' data has added',
         })
 
     } catch ( error ){
-        res.status(400).json({
-            error: {
-                message: 'error: ' + error.message
-            }
-        })
+        next(error)
     }
 }
 

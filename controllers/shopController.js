@@ -46,6 +46,13 @@ exports.show = async(req, res, next) => {
             _id: id
         }).populate('menus')
 
+        if(!shops){
+            //throw new Error('staff not found')
+            const error = new Error("shop not found")
+            error.statusCode = 400
+            throw error;
+        }
+
         const shopWithPhotodomain = {
                 id: shops._id,
                 name: shops.name,
@@ -54,23 +61,13 @@ exports.show = async(req, res, next) => {
                 menus: shops.menus
             }
         
-
-        if(!shops){
-            throw new Error('staff not found')
-        }
-        else{
             res.status(200).json({
                 data: shopWithPhotodomain
             })
-        }
-
+    
 
     } catch ( error ){
-        res.status(400).json({
-            error: {
-                message: 'error: ' + error.message
-            }
-        })
+        next(error)
     }
     /*const shopWithPhotodomain = shops.map((shop, index)=>{
         return {
