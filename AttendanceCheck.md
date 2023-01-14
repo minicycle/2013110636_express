@@ -3,3 +3,4 @@
     Thanarat (Ikkyu) : Chapter 3 - Node.js and Express.js
     Thanarat (Ikkyu) : Chapter 4 - Introduction MongoDB
     Thanarat (Ikkyu) : Chapter 5 - Advance MongoDB
+    Thanarat (Ikkyu) : Chapter 7 - อัพ โหลดไฟล์ภาพด้วย google storage
