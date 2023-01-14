@@ -1,12 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const companyColltroller = require('../controllers/companyColltroller')
+const companyController = require('../controllers/companyController')
 
-router.get('/', companyColltroller.comp); //get
-
-router.get('/:id', companyColltroller.show); //get by id
-router.post('/', companyColltroller.insert); //insert
-router.delete('/:id', companyColltroller.destroy); //delete
-router.put('/:id', companyColltroller.update); //update
+router.get('/', companyController.index);
+router.get('/:id', companyController.show);
+router.post('/', companyController.insert);
+router.delete('/:id', companyController.drop);
+router.put('/:id', companyController.update);
 
 module.exports = router;

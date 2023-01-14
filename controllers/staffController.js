@@ -4,35 +4,29 @@ const uuidv4 = require('uuid');
 const { promisify } = require('util')
 const writeFileAsync = promisify(fs.writeFile)
 
-const Shop = require('../models/shop')
-const Menu = require('../models/menu')
+const Staff = require('../models/staff')
 const config = require('../config/index')
 
 exports.index = async(req, res, next) => {
 
-    const shops = await Shop.find().select('name photo location').sort({_id:-1})
+    /*const staff = await Staff.find().sort({_id:1})
+    
+    res.status(200).json({
+        data: staff
+    })*/
 
-    const shopWithPhotodomain = shops.map((shop, index)=>{
+    
+    const staffs = await Staff.find().select('name photo location').sort({_id:-1})
+
+    const staffWithPhotodomain = staffs.map((staff, index)=>{
         return {
-            id: shop._id,
-            name: shop.name,
-            photo: config.DOMAIN + ':' + config.PORT +'/images/' + shop.photo,
-            location: shop.location
+            name: staff.name,
+            photo: config.DOMAIN + ':' + config.PORT +'/images/' + staff.photo,
         }
     })
     
     res.status(200).json({
-        data: shopWithPhotodomain
-    })
-}
-
-exports.menu = async(req, res, next) => {
-
-    //const menu = await Menu.find().select('+name -price')
-    const menu = await Menu.find().populate('shop')
-        
-    res.status(200).json({
-        data: menu
+        data: staffWithPhotodomain
     })
 }
 
@@ -42,25 +36,16 @@ exports.show = async(req, res, next) => {
 
         const { id } = req.params
 
-        const shops = await Shop.findOne({
-            _id: id
-        }).populate('menus')
+        const staff = await Staff.findOne({
+            _id: id /*req.params.id*/
+        })
 
-        const shopWithPhotodomain = {
-                id: shops._id,
-                name: shops.name,
-                photo: config.DOMAIN + ':' + config.PORT +'/images/' + shops.photo, 
-                location: shops.location,
-                menus: shops.menus
-            }
-        
-
-        if(!shops){
+        if(!staff){
             throw new Error('staff not found')
         }
         else{
             res.status(200).json({
-                data: shopWithPhotodomain
+                data: staff
             })
         }
 
@@ -72,35 +57,87 @@ exports.show = async(req, res, next) => {
             }
         })
     }
-    /*const shopWithPhotodomain = shops.map((shop, index)=>{
-        return {
-            id: shop._id,
-            name: shop.name,
-            location: 'http://localhost:3000/images/' + shop.photo, 
-            location: shop.location
-        }
-    })
-    
-    res.status(200).json({
-        data: shopWithPhotodomain
-    })*/
+
 }
 
 exports.insert = async(req, res, next) => {
 
-    const { name, location, photo } = req.body
+    const { name, salary, photo } = req.body
 
-    let shop = new Shop({
+    let staff = new Staff({
         name: name,
-        location: location, 
+        salary: salary, 
         photo: await saveImageToDisk(photo)
     });
-
-    await shop.save()
+    await staff.save()
 
     res.status(200).json({
-        message: name + ' restaurant data has added',
+        message: name + ' data has added',
     })
+}
+
+exports.drop = async(req, res, next) => {
+
+    try{
+
+        const { id } = req.params
+
+        const staff = await Staff.deleteOne({
+            _id: id /*req.params.id*/
+        })
+
+        if (staff.deletedCount === 0) {
+            throw new Error(' can\'t delete data / staff data not found')
+        }
+        else{
+            res.status(200).json({
+                message: 'data deleted'
+            })
+        }
+
+    } catch ( error ){
+        res.status(400).json({
+            error: {
+                message: 'error: ' + error.message
+            }
+        })
+    }
+
+}
+
+exports.update = async(req, res, next) => {
+
+    try{
+
+        const { id } = req.params
+        const { name, salary } = req.body
+
+        /*const staff = await Staff.findById(id)
+        staff.name = name
+        staff.salary = salary
+        await staff.save()*/
+
+        /*const staff = await Staff.findByIdAndUpdate(id, {
+            name: name,
+            salary: salary
+        })*/
+
+        const staff = await Staff.updateOne({ _id : id }, {
+            name: name,
+            salary: salary
+        })
+
+        res.status(200).json({
+            message: name + ' data has added',
+        })
+
+    } catch ( error ){
+        res.status(400).json({
+            error: {
+                message: 'error: ' + error.message
+            }
+        })
+    }
 }
 
 async function saveImageToDisk(baseImage) {

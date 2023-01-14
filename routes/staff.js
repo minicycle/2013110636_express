@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
-const staffColltroller = require('../controllers/staffColltroller')
+const staffController = require('../controllers/staffController')
 
-/*GET users listing */
-router.get('/', staffColltroller.comp);
+router.get('/', staffController.index);
 
-/*http://localhost:3000/staff/63942d9de94ce7368cf4e4ed */
-router.get('/:id', staffColltroller.show);
-router.delete('/:id', staffColltroller.destroy);
-router.put('/:id', staffColltroller.update);
-router.post('/', staffColltroller.insert);
+/* http://localhost:3000/staff/63942dcdce93112134c280f8 */
+router.get('/:id', staffController.show);
 
+router.post('/', staffController.insert);
 
+router.delete('/:id', staffController.drop);
+
+router.put('/:id', staffController.update);
 
 module.exports = router;
