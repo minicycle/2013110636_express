@@ -7,6 +7,7 @@ const writeFileAsync = promisify(fs.writeFile)
 const Shop = require('../models/shop')
 const Menu = require('../models/menu')
 const config = require('../config/index')
+const { validationResult } = require('express-validator')
 
 exports.index = async(req, res, next) => {
 
@@ -87,10 +88,19 @@ exports.insert = async(req, res, next) => {
 
     const { name, location, photo } = req.body
 
+    //validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = new Error("ข้อมูลที่ได้รับมาไม่ถูกต้อง")
+      error.statusCode = 422 //validation use 422
+      error.validation = errors.array()
+      throw error;
+    }
+
     let shop = new Shop({
         name: name,
         location: location, 
-        photo: await saveImageToDisk(photo)
+        photo: photo && await saveImageToDisk(photo)
     });
 
     await shop.save()

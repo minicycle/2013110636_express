@@ -1,9 +1,12 @@
-module.exports = (err,req,res,next) =>{
 
-    const statusCode = err.statusCode || 500
+module.exports = (err,req,res,next) => {
 
-    res.status(statusCode).json({
-        status_code:400,
-        message: err.message
-      })
+  const statusCode = err.statusCode || 500
+
+  res.status(statusCode).json({
+      status_code:statusCode,
+      message:err.message,
+      validation: err.validation
+  })
+
 }
