@@ -6,3 +6,4 @@
     Thanarat (Ikkyu) : Chapter 6 - Eviroment
     Thanarat (Ikkyu) : Chapter 7 - อัพ โหลดไฟล์ภาพด้วย google storage
     Thanarat (Ikkyu) : Chapter 8 - Login with JSON WEB TOKEN
+    Thanarat (Ikkyu) : Chapter 8 - Authentication
