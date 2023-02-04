@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   //res.render('index', { title: 'Express' });
   res.status(200).json({
-    message: 'RESTFul API Final Class_'
+    message: 'RESTFul API Final Class'
   })
 });
 
