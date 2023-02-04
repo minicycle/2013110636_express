@@ -103,3 +103,13 @@ exports.bio = (req, res, next) => {
         next(error)
       }
   }
+
+  //jwt
+  exports.profile = (req, res, next) => {
+    const {role,name,email } = req.user
+    res.status(200).json({
+      name:name,
+      email:email,
+      role:role
+    })
+  }
